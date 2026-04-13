@@ -4,9 +4,9 @@ import Dashboard from "./pages/Dashboard"
 import { useEffect, useState } from "react"
 import Login from "./components/Login"
 import SignUp from "./components/SignUp"
-
+import Expense from "./pages/Expense"
 import Income from "./pages/income"
-
+import Profile from "./pages/Profile"
 const API_URL = "http://localhost:4000";
 // to get transactions from localStorage
 const getTransactionsFromStorage = () => {
@@ -228,7 +228,21 @@ const App = () => {
               editTransaction={editTransaction}
               deleteTransaction={deleteTransaction}
               refreshTransactions={refreshTransactions} />} />
+
+          <Route path="/expense"
+            element={
+              <Expense
+                transactions={transactions}
+                addTransaction={addTransaction}
+                editTransaction={editTransaction}
+                deleteTransaction={deleteTransaction}
+                refreshTransactions={refreshTransactions} />
+            }
+          />
+          <Route path="/profile" element={<Profile user={user} onUpdateProfile={updateUserData} onLogout={handleLogout} />}
+          />
         </Route>
+        <Route path="*" element={<Navigate to={user ? "/" : "/login"} replace />} />
       </Routes>
     </>
   )

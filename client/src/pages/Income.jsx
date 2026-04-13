@@ -418,6 +418,8 @@ const Income = () => {
     timeFrame,
   ]);
 
+  // to delete an income transactions
+
   const handleDeleteTransaction = useCallback(
     async (id) => {
       if (!id) return;
@@ -443,6 +445,7 @@ const Income = () => {
     [getAuthHeaders, refreshTransactions, fetchOverview, timeFrame],
   );
 
+  // to Download it as an excel sheet i will use this 
   const handleExport = useCallback(async () => {
     try {
       const res = await axios.get(`${API_BASE}/income/downloadexcel`, {

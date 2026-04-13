@@ -65,9 +65,9 @@ const Navbar = ({ user: propUser, onLogout }) => {
             <div className={navbarStyles.container}>
                 <div className={navbarStyles.logoContainer} onClick={() => navigate("/")}>
 
-                    <div className={navbarStyles.logoImage}>
+                    {/* <div className={navbarStyles.logoImage}>
                         <img src="https://github.com/HexagonDigitalServices/ExpenseTracker/blob/main/frontend/src/assets/logo.png?raw=true" alt="logo" />
-                    </div>
+                    </div> */}
                     <span className={navbarStyles.logoText}>Expense Tracker</span>
                 </div>
                 {/* // if the user is present */}

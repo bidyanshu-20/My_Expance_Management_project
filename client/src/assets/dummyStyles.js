@@ -7,7 +7,7 @@ export const dashboardStyles = {
   headerContent: "flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8",
   headerTitle: "text-3xl md:text-4xl font-bold bg-gradient-to-r from-teal-600 to-cyan-700 bg-clip-text text-transparent",
   headerSubtitle: "text-gray-600 mt-2",
-  
+  backgroundColor:"bg-black",
   // Button styles
   addButton: "flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white px-5 py-3 rounded-xl transition-all shadow hover:shadow-md font-medium",
   

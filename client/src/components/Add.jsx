@@ -95,5 +95,4 @@ const AddTransactionModal = ({
         </div>
     )
 }
-
 export default AddTransactionModal;
