@@ -1,59 +1,58 @@
-import React, { memo, useCallback } from 'react'
-import { profileStyles } from '../assets/dummyStyles'
-import Modal from "react-modal";
-import { Eye, EyeOff, Lock, User, X } from 'lucide-react';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import React, { memo, useCallback, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Modal from "react-modal";
+import { Eye, EyeOff, Lock, User, X, LogOut } from 'lucide-react';
 import { toast, ToastContainer } from 'react-toastify';
-import '../App.css';
 import axios from 'axios';
 
 const BASE_URL = "http://localhost:4000/api";
 
 Modal.setAppElement('#root');
-// Move PasswordInput component outside of ProfilePage to prevent recreation on every render
-const PasswordInput = memo(({ name, label, value, error, showField, onToggle, onChange, disabled }) => (
-    <div>
-        <label className={profileStyles.passwordLabel}>
+
+// Reusable Password Input Component
+const PasswordInput = memo(({ 
+    name, 
+    label, 
+    value, 
+    error, 
+    showField, 
+    onToggle, 
+    onChange, 
+    disabled 
+}) => (
+    <div className="space-y-2 ">
+        <label className="block text-sm font-medium text-gray-700">
             {label}
         </label>
-        <div className={profileStyles.passwordContainer}>
+        <div className="relative">
             <input
                 type={showField ? "text" : "password"}
                 name={name}
                 value={value}
                 onChange={onChange}
-                className={`${profileStyles.inputWithError} ${error ? 'border-red-300' : 'border-gray-200'
-                    }`}
-                placeholder={`Enter ${label.toLowerCase()}`}
                 disabled={disabled}
-                // Add key prop to help React identify the input
-                key={`password-input-${name}`}
+                className={`w-full px-4 py-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all
+                    ${error ? 'border-red-300 bg-red-50' : 'border-gray-300 focus:border-emerald-500'}`}
+                placeholder={`Enter ${label.toLowerCase()}`}
             />
             <button
                 type="button"
                 onClick={onToggle}
-                className={profileStyles.passwordToggle}
                 disabled={disabled}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
             >
-                {showField ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                {showField ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
         </div>
-        {error && (
-            <p className={profileStyles.errorText}>{error}</p>
-        )}
+        {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
     </div>
 ));
 
 PasswordInput.displayName = 'PasswordInput';
 
-
-
-
-
 const Profile = ({ onUpdateProfile, onLogout }) => {
     const navigate = useNavigate();
+
     const [user, setUser] = useState({
         name: '',
         email: '',
@@ -77,59 +76,57 @@ const Profile = ({ onUpdateProfile, onLogout }) => {
     const [loading, setLoading] = useState(false);
 
     const getAuthToken = useCallback(() => localStorage.getItem("token"), []);
-    // API request 
-    const handleApiRequest = useCallback(async (method, getEndPoints, data = null) => {
+
+    const handleApiRequest = useCallback(async (method, endpoint, data = null) => {
         const token = getAuthToken();
         if (!token) {
             navigate("/login");
             return null;
         }
+
         try {
             setLoading(true);
             const config = {
                 method,
-                url: `${BASE_URL}${getEndPoints}`,
-                headers: { Authorization: `Bearer ${token}` },
+                url: `${BASE_URL}${endpoint}`,
+                headers: { 
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
             };
 
-            if (data) {
-                config.data = data;
-            }
+            if (data) config.data = data;
 
             const response = await axios(config);
             return response.data;
-
         } catch (error) {
-            console.log(`${method} request error:`, error);
-            if (error.response?.status == 401) {
-                navigate("/login")
+            console.error(`${method} request error:`, error);
+            if (error.response?.status === 401) {
+                navigate("/login");
             }
             throw error;
-        }
-        finally {
+        } finally {
             setLoading(false);
         }
     }, [getAuthToken, navigate]);
-    // to fetch current user
 
+    // Fetch user data
     useEffect(() => {
-        const fetchUserdata = async () => {
+        const fetchUserData = async () => {
             try {
                 const data = await handleApiRequest("get", "/user/me");
                 if (data) {
-                    const userdata = data.user || data;
-                    setUser(userdata);
-                    setTempUser(userdata);
+                    const userData = data.user || data;
+                    setUser(userData);
+                    setTempUser(userData);
                 }
-            } catch {
+            } catch (err) {
                 toast.error("Failed to fetch user data");
             }
         };
-        fetchUserdata();
+        fetchUserData();
     }, [handleApiRequest]);
 
-
-    // input change
     const handleInputChange = useCallback((e) => {
         const { name, value } = e.target;
         setTempUser(prev => ({ ...prev, [name]: value }));
@@ -138,222 +135,243 @@ const Profile = ({ onUpdateProfile, onLogout }) => {
     const handlePasswordChange = useCallback((e) => {
         const { name, value } = e.target;
         setPasswordData(prev => ({ ...prev, [name]: value }));
-        // Clear error for this field when user starts typing
         setPasswordErrors(prev => ({ ...prev, [name]: '' }));
     }, []);
 
-    // Password visibility toggle
     const togglePasswordVisibility = useCallback((field) => {
         setShowPassword(prev => ({ ...prev, [field]: !prev[field] }));
     }, []);
 
-    // save profile
+    // Save Profile
     const handleSaveProfile = async () => {
         try {
             const data = await handleApiRequest("put", "/user/profile", tempUser);
             if (data) {
-                const updateUser = data.user || data;
-                setUser(updateUser);
-                setTempUser(updateUser);
+                const updatedUser = data.user || data;
+                setUser(updatedUser);
+                setTempUser(updatedUser);
                 setEditMode(false);
-                onUpdateProfile?.(updateUser);
-                toast.success("Profile updated Successfully");
+                onUpdateProfile?.(updatedUser);
+                toast.success("Profile updated successfully!");
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || "Failed to Update Profile.");
+            toast.error(error.response?.data?.message || "Failed to update profile");
         }
-    }
+    };
+
     const handleCancelEdit = useCallback(() => {
         setTempUser(user);
         setEditMode(false);
     }, [user]);
 
-
-    // Password validation 
-
+    // Password Validation
     const validatePassword = useCallback(() => {
         const errors = {};
-        if (!passwordData.current) {
-            errors.current = "Current password is Required..";
-        }
-        if (!passwordData.new) {
-            errors.new = "New Password required";
-        }
-        else if (passwordData.new.length < 8) {
-            errors.new = "Password must be at least 8 characters";
-        }
-        if (passwordData.new !== passwordData.confirm) {
-            errors.confirm = "Password do not Match";
-        }
+        if (!passwordData.current) errors.current = "Current password is required";
+        if (!passwordData.new) errors.new = "New password is required";
+        else if (passwordData.new.length < 8) errors.new = "Password must be at least 8 characters";
+        if (passwordData.new !== passwordData.confirm) errors.confirm = "Passwords do not match";
+
         setPasswordErrors(errors);
         return Object.keys(errors).length === 0;
     }, [passwordData]);
 
-    // to change password
+    // Change Password
     const handlePasswordSubmit = async (e) => {
         e.preventDefault();
-        if (!validatePassword()) {
-            return;
-        }
+        if (!validatePassword()) return;
 
         try {
             await handleApiRequest("put", "/user/password", {
                 currentPassword: passwordData.current,
                 newPassword: passwordData.new,
-            })
-            toast.success("Password change is SuccessFul");
+            });
+
+            toast.success("Password changed successfully!");
             setShowPasswordModal(false);
-            setPasswordData({ current: "", new: "", confirm: "" });
+            setPasswordData({ current: '', new: '', confirm: '' });
             setPasswordErrors({});
             setShowPassword({ current: false, new: false, confirm: false });
         } catch (error) {
-            toast.error(error.response?.data?.message || "Failed to change Password.");
+            toast.error(error.response?.data?.message || "Failed to change password");
         }
     };
 
     const handleLogout = useCallback(() => {
         onLogout?.();
-        navigate("/signup");
-    }, [onLogout, navigate])
+        navigate("/login");
+    }, [onLogout, navigate]);
 
-    const closePasswordModel = useCallback(() => {
+    const closePasswordModal = useCallback(() => {
         if (!loading) {
             setShowPasswordModal(false);
-            setPasswordData({ current: "", new: "", confirm: "" });
+            setPasswordData({ current: '', new: '', confirm: '' });
             setPasswordErrors({});
             setShowPassword({ current: false, new: false, confirm: false });
         }
     }, [loading]);
 
     return (
-        <div className={profileStyles.container}>
-            <ToastContainer
-                position="top-right"
-                autoClose={2000}
-                hideProgressBar={false}
-                newestOnTop
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-            />
-            <div className={profileStyles.mainContainer}>
-                <div className={profileStyles.header}>
-                    <div className={profileStyles.avatar}>
-                        <User className='w-12 h-12 text-white' />
-                    </div>
-                    <h1 className={profileStyles.userName}>
-                        {user.name || "Loading..."}
-                    </h1>
-                    <p className={profileStyles.userEmail}>
-                        {user.email || "Loading..."}
-                    </p>
-                </div>
-                <div className={profileStyles.content}>
-                    <div className={profileStyles.grid}>
-                        <div className={profileStyles.card}>
-                            <div className='flex justify-between items-center mb-6'>
-                                <h2 className={profileStyles.cardTitle}>
-                                    <User className={profileStyles.icon} />
-                                    Personal Information
-                                </h2>
-                                {!editMode && (
-                                    <button onClick={() => setEditMode(true)}
-                                        className={profileStyles.editButton}
-                                        disabled={loading}>
-                                        {loading ? "Loading..." : "Edit"}
-                                    </button>
-                                )}
-                            </div>
-                            {editMode ? (
-                                <div className='space-y-4'>
-                                    <div>
-                                        <label className={profileStyles.label}>Full Name</label>
-                                        <input type="text" name="name" value={tempUser.name} onChange={handleInputChange} className={profileStyles.input} disabled={loading} />
-                                    </div>
-                                    <div>
-                                        <label className={profileStyles.label}>Email Address</label>
-                                        <input type="email" name="email" value={tempUser.email} onChange={handleInputChange} className={profileStyles.input} disabled={loading} />
-                                    </div>
-                                    <div className='flex gap-3 pt-4'>
-                                        <button onClick={handleSaveProfile} className={profileStyles.buttonPrimary} disabled={loading}>
-                                            {loading ? "Saving..." : "Save Changes"}
-                                        </button>
+        <div className="min-h-screen bg-gray-50 py-8 px-4">
+            <ToastContainer position="top-right" autoClose={2000} />
 
-                                        <button onClick={handleCancelEdit} className={profileStyles.buttonSecondary} disabled={loading}>
-                                            Cancel
-                                        </button>
-                                    </div>
+            <div className="max-w-4xl mx-auto">
+                {/* Profile Header */}
+                <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-10 mb-8">
+                    <div className="flex flex-col items-center text-center">
+                        <div className="w-28 h-28 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl flex items-center justify-center mb-6 shadow-lg">
+                            <User className="w-14 h-14 text-white" />
+                        </div>
+                        <h1 className="text-4xl font-bold text-gray-900 mb-2">
+                            {user.name || "Loading..."}
+                        </h1>
+                        <p className="text-gray-600 text-lg">{user.email || "Loading..."}</p>
+                        {user.joinDate && (
+                            <p className="text-sm text-gray-500 mt-2">
+                                Member since {new Date(user.joinDate).getFullYear()}
+                            </p>
+                        )}
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    {/* Personal Information Card */}
+                    <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+                        <div className="flex justify-between items-center mb-8">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-emerald-100 rounded-2xl flex items-center justify-center">
+                                    <User className="w-5 h-5 text-emerald-600" />
                                 </div>
-                            ) : (
-                                <div className='space-y-4'>
-                                    <div>
-                                        <p className={profileStyles.label}>
-                                            Full Name
-                                        </p>
-                                        <p className="font-medium text-gray-800 ">
-                                            {user.name}
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <p className={profileStyles.label}>
-                                            Email Address:
-                                        </p>
-                                        <p className="font-medium text-gray-800 ">
-                                            {user.email}
-                                        </p>
-                                    </div>
-                                </div>
+                                <h2 className="text-2xl font-semibold text-gray-900">Personal Information</h2>
+                            </div>
+                            {!editMode && (
+                                <button 
+                                    onClick={() => setEditMode(true)}
+                                    disabled={loading}
+                                    className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-medium transition-all disabled:opacity-70"
+                                >
+                                    Edit Profile
+                                </button>
                             )}
                         </div>
-                        <div className={profileStyles.card}>
-                            <h2 className={profileStyles.cardTitle}>
-                                <Lock className={profileStyles.icon} />
-                                Account Security:
-                            </h2>
-                            <div className='space-y-4'>
-                                <div className={profileStyles.securityItem}>
-                                    <div>
-                                        <p className={profileStyles.securityText}>
-                                            Password:
-                                        </p>
-                                    </div>
-                                    <button onClick={() => setShowPasswordModal(true)} className={profileStyles.changeButton} disabled={loading}>
-                                        Change
+
+                        {editMode ? (
+                            <div className="space-y-6">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                                    <input 
+                                        type="text" 
+                                        name="name" 
+                                        value={tempUser.name} 
+                                        onChange={handleInputChange} 
+                                        disabled={loading}
+                                        className="w-full px-5 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                                    <input 
+                                        type="email" 
+                                        name="email" 
+                                        value={tempUser.email} 
+                                        onChange={handleInputChange} 
+                                        disabled={loading}
+                                        className="w-full px-5 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                    />
+                                </div>
+
+                                <div className="flex gap-4 pt-4">
+                                    <button 
+                                        onClick={handleSaveProfile} 
+                                        disabled={loading}
+                                        className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 rounded-2xl font-medium transition-all disabled:opacity-70"
+                                    >
+                                        {loading ? "Saving..." : "Save Changes"}
+                                    </button>
+                                    <button 
+                                        onClick={handleCancelEdit} 
+                                        disabled={loading}
+                                        className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-3.5 rounded-2xl font-medium transition-all"
+                                    >
+                                        Cancel
                                     </button>
                                 </div>
                             </div>
-                            <button onClick={handleLogout} className={`${profileStyles.buttonPrimary} mt-6 w-full hover:opacity-90 transition-opacity `} disabled={loading}>
-                                {loading ? "Processing..." : "Logout"}
-                            </button>
+                        ) : (
+                            <div className="space-y-8">
+                                <div>
+                                    <p className="text-sm text-gray-500">Full Name</p>
+                                    <p className="text-xl font-semibold text-gray-900 mt-1">{user.name}</p>
+                                </div>
+                                <div>
+                                    <p className="text-sm text-gray-500">Email Address</p>
+                                    <p className="text-xl font-semibold text-gray-900 mt-1">{user.email}</p>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Account Security Card */}
+                    <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+                        <div className="flex items-center gap-3 mb-8">
+                            <div className="w-10 h-10 bg-amber-100 rounded-2xl flex items-center justify-center">
+                                <Lock className="w-5 h-5 text-amber-600" />
+                            </div>
+                            <h2 className="text-2xl font-semibold text-gray-900">Account Security</h2>
                         </div>
+
+                        <div className="bg-gray-50 rounded-2xl p-6 mb-8">
+                            <div className="flex justify-between items-center">
+                                <div>
+                                    <p className="font-medium text-gray-800">Password</p>
+                                    <p className="text-sm text-gray-500">Last changed recently</p>
+                                </div>
+                                <button 
+                                    onClick={() => setShowPasswordModal(true)}
+                                    disabled={loading}
+                                    className="px-6 py-2.5 bg-white border border-gray-300 hover:border-emerald-500 text-gray-700 hover:text-emerald-600 rounded-2xl font-medium transition-all"
+                                >
+                                    Change Password
+                                </button>
+                            </div>
+                        </div>
+
+                        <button 
+                            onClick={handleLogout}
+                            disabled={loading}
+                            className="w-full flex items-center justify-center gap-3 bg-red-600 hover:bg-red-700 text-white py-4 rounded-2xl font-medium transition-all disabled:opacity-70"
+                        >
+                            <LogOut size={20} />
+                            Logout from Account
+                        </button>
                     </div>
                 </div>
             </div>
+
+            {/* Change Password Modal */}
             <Modal
                 isOpen={showPasswordModal}
-                onRequestClose={closePasswordModel}
+                onRequestClose={closePasswordModal}
                 contentLabel="Change Password"
-                className="modal"
-                overlayClassName="modal-overlay"
-                // Prevent unnecessary re-renders
+                className="fixed inset-0 flex items-center justify-center p-4"
+                overlayClassName="fixed inset-0 bg-black/60 z-50"
                 shouldCloseOnOverlayClick={!loading}
                 shouldCloseOnEsc={!loading}
             >
-                <div className={profileStyles.modalContent}>
-                    <div className={profileStyles.modalHeader}>
-                        <h3 className={profileStyles.modalTitle}>Change Password</h3>
-                        <button
-                            onClick={closePasswordModel}
-                            className="text-gray-500 hover:text-gray-800 disabled:opacity-50"
+                <div className="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden">
+                    <div className="flex items-center justify-between px-8 py-6 border-b">
+                        <h3 className="text-2xl font-semibold text-gray-900">Change Password</h3>
+                        <button 
+                            onClick={closePasswordModal}
                             disabled={loading}
+                            className="text-gray-400 hover:text-gray-600 transition-colors"
                         >
-                            <X className="w-6 h-6" />
+                            <X size={28} />
                         </button>
                     </div>
 
-                    <form onSubmit={handlePasswordSubmit} className="space-y-4 lg:-mx-20">
+                    <form onSubmit={handlePasswordSubmit} className="p-8 space-y-6">
                         <PasswordInput
                             name="current"
                             label="Current Password"
@@ -387,19 +405,19 @@ const Profile = ({ onUpdateProfile, onLogout }) => {
                             disabled={loading}
                         />
 
-                        <div className="flex gap-3 pt-4">
+                        <div className="flex gap-4 pt-6">
                             <button
                                 type="submit"
-                                className={profileStyles.buttonPrimary}
                                 disabled={loading}
+                                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 rounded-2xl font-medium transition-all disabled:opacity-70"
                             >
                                 {loading ? 'Updating...' : 'Update Password'}
                             </button>
                             <button
                                 type="button"
-                                onClick={closePasswordModel}
-                                className={profileStyles.buttonSecondary}
+                                onClick={closePasswordModal}
                                 disabled={loading}
+                                className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-3.5 rounded-2xl font-medium transition-all"
                             >
                                 Cancel
                             </button>
@@ -408,7 +426,7 @@ const Profile = ({ onUpdateProfile, onLogout }) => {
                 </div>
             </Modal>
         </div>
-    )
-}
+    );
+};
 
-export default Profile
+export default Profile;
