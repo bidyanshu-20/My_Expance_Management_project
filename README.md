@@ -1,16 +1,99 @@
-# React + Vite
+# 💰 Expense Manager
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack web application to track, manage, and visualize your personal or business expenses efficiently.
 
-Currently, two official plugins are available:
+Built with the **MERN Stack** (MongoDB, Express.js, React.js, Node.js).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## ✨ Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- ✅ User Authentication (Register & Login with JWT)
+- ✅ Add, Edit, and Delete Expenses
+- ✅ Categorize expenses (Food, Transport, Rent, Shopping, etc.)
+- ✅ Filter expenses by date, category, or amount
+- ✅ Dashboard with expense summary and statistics
+- ✅ Visual Charts (Pie Chart & Bar Chart) for spending analysis
+- ✅ Monthly/Yearly expense reports
+- ✅ Responsive Design (Mobile + Desktop friendly)
+- ✅ Dark/Light Mode Support (Optional)
+- ✅ Secure API with proper validation
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Tech Stack
+
+### Frontend
+- **React.js** (with Hooks & Context API / Redux)
+- **React Router** for navigation
+- **Chart.js** or **Recharts** for data visualization
+- **Tailwind CSS** / **Material-UI** / **Bootstrap** (choose one)
+- **Axios** for API calls
+
+### Backend
+- **Node.js** + **Express.js**
+- **MongoDB** (with Mongoose ODM)
+- **JWT (JSON Web Tokens)** for authentication
+- **bcrypt.js** for password hashing
+- **Express Validator** / **Joi** for input validation
+- **dotenv** for environment variables
+
+---
+
+
+## 📂 Project Structure
+
+```bash
+expense-manager/
+├── backend/
+│   ├── config/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── .env
+│   └── server.js
+│
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── context/ or redux/
+│   │   ├── utils/
+│   │   ├── App.js
+│   │   └── index.js
+│   └── package.json
+│
+├── README.md
+└── .gitignore
+
+🚀 Getting Started
+Prerequisites
+
+Node.js (v18 or higher)
+MongoDB (Local or MongoDB Atlas)
+Git
+
+Installation
+
+Clone the repositoryBashgit clone https://github.com/yourusername/expense-manager.git
+cd expense-manager
+Backend SetupBashcd backend
+npm installCreate a .env file in the backend folder:envPORT=4000
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret_keyStart the backend server:Bashnpm run dev    # or   node server.js
+Frontend SetupBashcd ../frontend
+npm installStart the frontend:Bashnpm start
+Open your browser and go to http://localhost:4000
+
+
+## 📸 Screenshot
+
+
+![Expanse Manager](./client/src/assets/p1.png);
+![User Dashboard](./client/src/assets/p2.png);
+![Expanse Add panel](./client/src/assets/p3.png);
+![User Profile](./client/src/assets/p4.png);
+
+
