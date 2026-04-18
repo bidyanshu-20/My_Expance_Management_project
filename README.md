@@ -91,9 +91,12 @@ Open your browser and go to http://localhost:4000
 ## 📸 Screenshot
 
 
-![Expense Manager](./screenshots/p1.png);
-![User Dashboard](./screenshots/p2.png)
-![Expense Add Panel](./screenshots/p3.png)
-![User Profile](./screenshots/p4.png)
+![Expense Manager](https://raw.githubusercontent.com/bidyanshu-20/My_Expance_Management_project/master/client/screenshots/p1.png)
+
+![User Dashboard](https://raw.githubusercontent.com/bidyanshu-20/My_Expance_Management_project/master/client/screenshots/p2.png)
+
+![Expense Add Panel](https://raw.githubusercontent.com/bidyanshu-20/My_Expance_Management_project/master/client/screenshots/p3.png)
+
+![User Profile](https://raw.githubusercontent.com/bidyanshu-20/My_Expance_Management_project/master/client/screenshots/p4.png)
 
 
