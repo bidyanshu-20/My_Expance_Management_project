@@ -91,9 +91,9 @@ Open your browser and go to http://localhost:4000
 ## 📸 Screenshot
 
 
-![Expanse Manager](./client/src/assets/p1.png);
-![User Dashboard](./client/src/assets/p2.png);
-![Expanse Add panel](./client/src/assets/p3.png);
-![User Profile](./client/src/assets/p4.png);
+![Expense Manager](./screenshots/p1.png);
+![User Dashboard](./screenshots/p2.png)
+![Expense Add Panel](./screenshots/p3.png)
+![User Profile](./screenshots/p4.png)
 
 
