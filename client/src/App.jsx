@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import Login from "./components/Login"
 import SignUp from "./components/SignUp"
 import Expense from "./pages/Expense"
-import Income from "./pages/income"
+import Income from "./pages/Income"
 import Profile from "./pages/Profile"
 const API_URL = "http://localhost:4000";
 // to get transactions from localStorage
