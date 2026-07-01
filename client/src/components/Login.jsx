@@ -21,6 +21,7 @@ const Login = ({ onLogin, API_URL = "http://localhost:4000" }) => {
       const res = await axios.get(`${BASE_URL}/api/user/me`, {
         headers: { Authorization: `Bearer ${token}` }
       });
+      console.log("P->",res.data);
       return res.data;
     } catch (err) {
       console.warn("Could not fetch profile:", err);

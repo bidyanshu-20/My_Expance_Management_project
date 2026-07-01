@@ -89,6 +89,12 @@ const Profile = ({ onUpdateProfile, onLogout }) => {
         sessionStorage.getItem("authToken"), []);
 
     const handleApiRequest = useCallback(async (method, endpoint, data = null) => {
+
+        console.log("BASE_URL:", BASE_URL);
+        console.log("TOKEN:", token);
+        console.log("URL:", `${BASE_URL}${endpoint}`);
+
+
         const token = getAuthToken();
         if (!token) {
             navigate("/login");
@@ -109,7 +115,8 @@ const Profile = ({ onUpdateProfile, onLogout }) => {
             if (data) config.data = data;
 
             const response = await axios(config);
-            console.log("Profile data is ",response.data);
+            // console.log("Profile data is ", response.data);
+            console.log("Response:", response.data);
             return response.data;
         } catch (error) {
             console.error(`${method} request error:`, error);
