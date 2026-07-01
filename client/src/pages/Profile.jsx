@@ -91,11 +91,11 @@ const Profile = ({ onUpdateProfile, onLogout }) => {
     const handleApiRequest = useCallback(async (method, endpoint, data = null) => {
 
         console.log("BASE_URL:", BASE_URL);
-        console.log("TOKEN:", token);
         console.log("URL:", `${BASE_URL}${endpoint}`);
 
 
         const token = getAuthToken();
+         console.log("TOKEN:",token);
         if (!token) {
             navigate("/login");
             return null;
