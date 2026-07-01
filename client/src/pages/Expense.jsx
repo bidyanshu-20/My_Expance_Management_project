@@ -30,7 +30,7 @@ import AddTransactionModal from "../components/Add";
 import { getTimeFrameRange, generateChartPoints } from "../components/Helpers";
 import { CATEGORY_ICONS } from "../assets/color";
 
-const API_BASE = import.meta.env.VITE_API_URL;
+const API_BASE = `${import.meta.env.VITE_API_URL}/api`;
 
 function toIsoWithClientTime(dateValue) {
     if (!dateValue) return new Date().toISOString();
@@ -89,7 +89,7 @@ const Expense = () => {
     // Fetch overview from server
     const fetchOverview = useCallback(async (range = timeFrame) => {
         try {
-            await axios.get(`${API_BASE}/expense/overview`, {
+            await axios.get(`${API_BASE}/expense/overview`, {  // api -------------------------------
                 headers: getAuthHeaders(),
                 params: { range },
             });
