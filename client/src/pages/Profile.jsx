@@ -9,10 +9,13 @@ import axios from 'axios';
 const appName = import.meta.env.VITE_API_URL;
 
 const BASE_URL = `${appName}/api`;
+// console.log("==>",BASE_URL);
+
+
 Modal.setAppElement('#root');
 // const appName = import.meta.env.VITE_API_URL;
 
-console.log("->>>>>",appName);
+// console.log("->>>>>",appName);
 
 // Reusable Password Input Component
 const PasswordInput = memo(({
@@ -106,6 +109,7 @@ const Profile = ({ onUpdateProfile, onLogout }) => {
             if (data) config.data = data;
 
             const response = await axios(config);
+            console.log("Profile data is ",response.data);
             return response.data;
         } catch (error) {
             console.error(`${method} request error:`, error);
