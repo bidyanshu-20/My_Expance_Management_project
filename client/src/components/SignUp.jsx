@@ -13,6 +13,10 @@ const SignUp = ({ onSignup, API_URL = "http://localhost:4000" }) => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+
+  const BASE_URL = import.meta.env.VITE_API_URL;
+
+
   const fetchProfile = async (token) => {
     if (!token) return null;
     try {
@@ -64,7 +68,7 @@ const SignUp = ({ onSignup, API_URL = "http://localhost:4000" }) => {
     setIsLoading(true);
 
     try {
-      const res = await axios.post("/api/user/signup", 
+      const res = await axios.post(`${BASE_URL}/api/user/signup`, 
         { name, email, password }, 
         { headers: { "Content-Type": "application/json" } }
       );

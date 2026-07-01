@@ -18,7 +18,7 @@ const Login = ({ onLogin, API_URL = "http://localhost:4000" }) => {
   const fetchProfile = async (token) => {
     if (!token) return null;
     try {
-      const res = await axios.get(`${BASE_URL}api/user/me`, {
+      const res = await axios.get(`${BASE_URL}/api/user/me`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       return res.data;
@@ -44,7 +44,7 @@ const Login = ({ onLogin, API_URL = "http://localhost:4000" }) => {
     setError("");
 
     try {
-      const res = await axios.post(`${BASE_URL}api/user/login`, 
+      const res = await axios.post(`${BASE_URL}/api/user/login`, 
         { email, password }, 
         { headers: { "Content-Type": "application/json" } }
       );

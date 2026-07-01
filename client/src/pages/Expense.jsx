@@ -30,7 +30,7 @@ import AddTransactionModal from "../components/Add";
 import { getTimeFrameRange, generateChartPoints } from "../components/Helpers";
 import { CATEGORY_ICONS } from "../assets/color";
 
-const API_BASE = "http://localhost:4000/api";
+const API_BASE = import.meta.env.VITE_API_URL;
 
 function toIsoWithClientTime(dateValue) {
     if (!dateValue) return new Date().toISOString();
