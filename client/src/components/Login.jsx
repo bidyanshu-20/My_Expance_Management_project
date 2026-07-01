@@ -11,10 +11,10 @@ const Login = ({ onLogin, API_URL = "http://localhost:4000" }) => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-
+ 
 
   const BASE_URL = import.meta.env.VITE_API_URL;
-
+  console.log("->",BASE_URL);
   const fetchProfile = async (token) => {
     if (!token) return null;
     try {
@@ -44,8 +44,8 @@ const Login = ({ onLogin, API_URL = "http://localhost:4000" }) => {
     setError("");
 
     try {
-      const res = await axios.post(`${BASE_URL}/api/user/login`,
-        { email, password },
+      const res = await axios.post(`${BASE_URL}/api/user/login`, 
+        { email, password }, 
         { headers: { "Content-Type": "application/json" } }
       );
 
@@ -79,9 +79,9 @@ const Login = ({ onLogin, API_URL = "http://localhost:4000" }) => {
       setPassword("");
     } catch (err) {
       console.error("Login error:", err?.response || err);
-      const serverMsg = err.response?.data?.message
-        || err.response?.data
-        || err.message
+      const serverMsg = err.response?.data?.message 
+        || err.response?.data 
+        || err.message 
         || "Login failed. Please try again.";
       setError(serverMsg);
     } finally {
@@ -96,13 +96,13 @@ const Login = ({ onLogin, API_URL = "http://localhost:4000" }) => {
 
       <div className="w-full max-w-md relative z-10">
         <div className="bg-zinc-900/80 backdrop-blur-2xl border border-zinc-700/50 rounded-3xl shadow-2xl overflow-hidden">
-
+          
           {/* Header */}
           <div className="px-8 pt-10 pb-8 text-center">
             <div className="mx-auto w-20 h-20 bg-gradient-to-br from-teal-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-xl mb-6 ring-1 ring-white/10">
               <User className="w-11 h-11 text-white" />
             </div>
-
+            
             <h1 className="text-3xl font-semibold text-white mb-2 tracking-tight">
               Welcome Back
             </h1>
@@ -192,8 +192,8 @@ const Login = ({ onLogin, API_URL = "http://localhost:4000" }) => {
                 type="submit"
                 disabled={isLoading}
                 className={`w-full py-4 rounded-2xl font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-2 shadow-lg
-                  ${isLoading
-                    ? 'bg-teal-600/70 cursor-not-allowed'
+                  ${isLoading 
+                    ? 'bg-teal-600/70 cursor-not-allowed' 
                     : 'bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-600 hover:to-emerald-500 active:scale-[0.985]'
                   } text-white`}
               >
@@ -213,8 +213,8 @@ const Login = ({ onLogin, API_URL = "http://localhost:4000" }) => {
             <div className="mt-8 text-center">
               <p className="text-zinc-400">
                 Don't have an account?{' '}
-                <Link
-                  to="/signup"
+                <Link 
+                  to="/signup" 
                   className="font-medium text-teal-400 hover:text-teal-300 transition-colors"
                 >
                   Create account

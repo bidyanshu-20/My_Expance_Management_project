@@ -10,7 +10,7 @@ const appName = import.meta.env.VITE_API_URL;
 
 const BASE_URL = `${appName}/api`;
 Modal.setAppElement('#root');
-const appName = import.meta.env.VITE_API_URL;
+// const appName = import.meta.env.VITE_API_URL;
 
 console.log("->>>>>",appName);
 
