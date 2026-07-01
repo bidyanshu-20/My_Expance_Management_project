@@ -36,6 +36,9 @@ import GaugeCard from '../components/GaugeCard';
 
 import { Legend, Pie, ResponsiveContainer, Tooltip, PieChart, Cell } from 'recharts';
 
+
+const API_BASE = import.meta.env.VITE_API_URL;
+
 const getAuthHeader = () => {
     const token = localStorage.getItem("token") || localStorage.getItem("authToken") || sessionStorage.getItem("token") || sessionStorage.getItem("authToken");
     return token ? { Authorization: `Bearer ${token}` } : {};
@@ -186,7 +189,7 @@ const Dashboard = () => {
     const fetchDashboardOverview = async () => {
         try {
             setLoading(true);
-            const res = await axios.get("/api/dashboard", { headers: getAuthHeader() });
+            const res = await axios.get(`${API_BASE}/api/dashboard`, { headers: getAuthHeader() });
 
             if (res?.data?.success) {
                 const data = res.data.data;
@@ -232,9 +235,9 @@ const Dashboard = () => {
         try {
             setLoading(true);
             if (newTransaction.type === "income") {
-                await axios.post("/api/income/add", payload, { headers: getAuthHeader() });
+                await axios.post(`${API_BASE}/api/income/add`, payload, { headers: getAuthHeader() });
             } else {
-                await axios.post("/api/expense/add", payload, { headers: getAuthHeader() });
+                await axios.post(`${API_BASE}/api/expense/add`, payload, { headers: getAuthHeader() });
             }
 
             await refreshTransactions();
