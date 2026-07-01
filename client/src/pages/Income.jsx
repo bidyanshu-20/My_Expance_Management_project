@@ -57,6 +57,11 @@ const Income = () => {
         refreshTransactions,
     } = useOutletContext();
 
+    console.log("Transactions received from Outlet:");
+    console.log(outletTransactions);
+    console.log("Length:", outletTransactions.length);
+
+
     const [showModal, setShowModal] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [showAll, setShowAll] = useState(false);
@@ -154,6 +159,7 @@ const Income = () => {
                 headers: getAuthHeaders(),
                 params: { range },
             });
+            console.log(res.data);
 
             if (res.data?.success) {
                 const payload = res.data.data ?? {};
