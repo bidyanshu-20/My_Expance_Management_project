@@ -31,7 +31,7 @@ import FinancialCard from "../components/FinancialCard";
 import { getTimeFrameRange, generateChartPoints } from "../components/Helpers";
 import { INCOME_COLORS, CATEGORY_ICONS_Inc } from "../assets/color";
 
-const API_BASE = import.meta.env.VITE_API_URL;
+const API_BASE = `${import.meta.env.VITE_API_URL}/api`;
 
 function toIsoWithClientTime(dateValue) {
     if (!dateValue) return new Date().toISOString();
