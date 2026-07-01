@@ -3,32 +3,32 @@ import { useOutletContext } from 'react-router-dom';
 import axios from 'axios';
 
 import AddTransactionModel from '../components/Add';
-import { 
-    GAUGE_COLORS, 
-    COLORS, 
-    INCOME_CATEGORY_ICONS, 
-    EXPENSE_CATEGORY_ICONS 
+import {
+    GAUGE_COLORS,
+    COLORS,
+    INCOME_CATEGORY_ICONS,
+    EXPENSE_CATEGORY_ICONS
 } from '../assets/color';
 
-import { 
-    ArrowDown, 
-    TrendingUp, 
-    TrendingDown, 
-    PieChart as PieChartIcon, 
-    BarChart2, 
-    ChevronDown, 
-    ChevronUp, 
-    DollarSign, 
-    PiggyBank, 
-    Plus, 
-    ShoppingCart, 
-    Wallet 
+import {
+    ArrowDown,
+    TrendingUp,
+    TrendingDown,
+    PieChart as PieChartIcon,
+    BarChart2,
+    ChevronDown,
+    ChevronUp,
+    DollarSign,
+    PiggyBank,
+    Plus,
+    ShoppingCart,
+    Wallet
 } from 'lucide-react';
 
-import { 
-    getTimeFrameRange, 
-    getPreviousTimeFrameRange, 
-    calculateData 
+import {
+    getTimeFrameRange,
+    getPreviousTimeFrameRange,
+    calculateData
 } from '../components/Helpers';
 
 import FinancialCard from '../components/FinancialCard';
@@ -37,7 +37,7 @@ import GaugeCard from '../components/GaugeCard';
 import { Legend, Pie, ResponsiveContainer, Tooltip, PieChart, Cell } from 'recharts';
 
 const getAuthHeader = () => {
-    const token = localStorage.getItem("token") || localStorage.getItem("authToken");
+    const token = localStorage.getItem("token") || localStorage.getItem("authToken") || sessionStorage.getItem("token") || sessionStorage.getItem("authToken");
     return token ? { Authorization: `Bearer ${token}` } : {};
 };
 
@@ -59,7 +59,7 @@ const Dashboard = () => {
     const {
         transactions: outletTransactions = [],
         timeFrame = "monthly",
-        setTimeFrame = () => {},
+        setTimeFrame = () => { },
         refreshTransactions
     } = useOutletContext();
 
@@ -280,11 +280,10 @@ const Dashboard = () => {
                         <button
                             key={frame}
                             onClick={() => setTimeFrame(frame)}
-                            className={`px-8 py-3 text-sm font-semibold rounded-3xl transition-all ${
-                                timeFrame === frame
+                            className={`px-8 py-3 text-sm font-semibold rounded-3xl transition-all ${timeFrame === frame
                                     ? "bg-indigo-600 text-white shadow"
                                     : "text-gray-600 hover:text-gray-900"
-                            }`}
+                                }`}
                         >
                             {frame.charAt(0).toUpperCase() + frame.slice(1)}
                         </button>

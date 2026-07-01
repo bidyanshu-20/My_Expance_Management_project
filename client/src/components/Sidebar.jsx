@@ -119,15 +119,6 @@ const Sidebar = ({ user, isCollapsed, setIsCollapsed }) => {
                     {/* Footer */}
                     <div className="p-4 border-t border-gray-100 mt-auto">
                         <div className="space-y-1">
-                            <Link 
-                                to="https://www.hexagondigitalservices.com/contact"
-                                target="_blank"
-                                className={`flex items-center gap-4 px-5 py-3 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-2xl transition-colors ${isCollapsed ? 'justify-center' : ''}`}
-                            >
-                                <HelpCircle size={20} />
-                                {!isCollapsed && <span>Support</span>}
-                            </Link>
-
                             <button 
                                 onClick={handleLogout}
                                 className={`flex items-center gap-4 px-5 py-3 text-sm font-medium text-red-600 hover:bg-red-50 rounded-2xl transition-colors w-full ${isCollapsed ? 'justify-center' : ''}`}

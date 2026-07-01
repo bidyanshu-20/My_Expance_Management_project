@@ -5,9 +5,9 @@ import axios from 'axios';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 
-import { 
-    ArrowDown, ArrowUp, Clock, DollarSign, PiggyBank, 
-    RefreshCw, ChevronDown, ChevronUp, PieChart, Info 
+import {
+    ArrowDown, ArrowUp, Clock, DollarSign, PiggyBank,
+    RefreshCw, ChevronDown, ChevronUp, PieChart, Info
 } from 'lucide-react';
 
 const API_BASE = "/api";
@@ -41,7 +41,7 @@ const filterTransactions = (transactions, frame) => {
         case "monthly":
             return transactions.filter(
                 (t) => new Date(t.date).getMonth() === now.getMonth() &&
-                       new Date(t.date).getFullYear() === now.getFullYear()
+                    new Date(t.date).getFullYear() === now.getFullYear()
             );
         default:
             return transactions;
@@ -70,9 +70,14 @@ const Layout = ({ onLogout, user }) => {
     const fetchTransactions = async () => {
         try {
             setLoading(true);
-            const token = localStorage.getItem("token");
-            const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
+            const token =
+                localStorage.getItem("token") ||
+                sessionStorage.getItem("token") ||
+                localStorage.getItem("authToken") ||
+                sessionStorage.getItem("authToken");
+
+            const headers = token ? { Authorization: `Bearer ${token}` } : {};
             const [incomeRes, expenseRes] = await Promise.all([
                 axios.get(`${API_BASE}/income/get`, { headers }),
                 axios.get(`${API_BASE}/expense/get`, { headers }),
@@ -174,8 +179,8 @@ const Layout = ({ onLogout, user }) => {
             .filter(t => t.type === "expense")
             .reduce((sum, t) => sum + Number(t.amount), 0);
 
-        const savingsRate = last30DaysIncome > 0 
-            ? Math.round(((last30DaysIncome - last30DaysExpenses) / last30DaysIncome) * 100) 
+        const savingsRate = last30DaysIncome > 0
+            ? Math.round(((last30DaysIncome - last30DaysExpenses) / last30DaysIncome) * 100)
             : 0;
 
         const expenseChange = 12; // You can enhance this calculation later
@@ -193,7 +198,7 @@ const Layout = ({ onLogout, user }) => {
         };
     }, [transactions]);
 
-    const timeFrameLabel = timeFrame === "daily" ? "Today" 
+    const timeFrameLabel = timeFrame === "daily" ? "Today"
         : timeFrame === "weekly" ? "This Week" : "This Month";
 
     const outletContext = {
@@ -225,10 +230,10 @@ const Layout = ({ onLogout, user }) => {
     return (
         <div className="flex dark:text-zinc-500 dark:bg-black h-screen overflow-hidden bg-gray-50">
             {/* Sidebar */}
-            <Sidebar 
-                user={user} 
-                isCollapsed={isCollapsed} 
-                setIsCollapsed={setIsCollapsed} 
+            <Sidebar
+                user={user}
+                isCollapsed={isCollapsed}
+                setIsCollapsed={setIsCollapsed}
             />
 
             {/* Main Content Area */}
@@ -339,8 +344,8 @@ const Layout = ({ onLogout, user }) => {
                                         <Clock className="w-6 h-6 text-purple-600" />
                                         <h3 className="text-xl font-semibold">Recent Transactions</h3>
                                     </div>
-                                    <button 
-                                        onClick={fetchTransactions} 
+                                    <button
+                                        onClick={fetchTransactions}
                                         disabled={loading}
                                         className="p-2 hover:bg-gray-100 rounded-xl transition"
                                     >

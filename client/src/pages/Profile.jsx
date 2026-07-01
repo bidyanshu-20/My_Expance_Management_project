@@ -10,15 +10,15 @@ const BASE_URL = "http://localhost:4000/api";
 Modal.setAppElement('#root');
 
 // Reusable Password Input Component
-const PasswordInput = memo(({ 
-    name, 
-    label, 
-    value, 
-    error, 
-    showField, 
-    onToggle, 
-    onChange, 
-    disabled 
+const PasswordInput = memo(({
+    name,
+    label,
+    value,
+    error,
+    showField,
+    onToggle,
+    onChange,
+    disabled
 }) => (
     <div className="space-y-2 ">
         <label className="block text-sm font-medium text-gray-700">
@@ -75,7 +75,10 @@ const Profile = ({ onUpdateProfile, onLogout }) => {
     const [passwordErrors, setPasswordErrors] = useState({});
     const [loading, setLoading] = useState(false);
 
-    const getAuthToken = useCallback(() => localStorage.getItem("token"), []);
+    const getAuthToken = useCallback(() => localStorage.getItem("token") ||
+        sessionStorage.getItem("token") ||
+        localStorage.getItem("authToken") ||
+        sessionStorage.getItem("authToken"), []);
 
     const handleApiRequest = useCallback(async (method, endpoint, data = null) => {
         const token = getAuthToken();
@@ -89,7 +92,7 @@ const Profile = ({ onUpdateProfile, onLogout }) => {
             const config = {
                 method,
                 url: `${BASE_URL}${endpoint}`,
-                headers: { 
+                headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
@@ -245,7 +248,7 @@ const Profile = ({ onUpdateProfile, onLogout }) => {
                                 <h2 className="text-2xl font-semibold text-gray-900">Personal Information</h2>
                             </div>
                             {!editMode && (
-                                <button 
+                                <button
                                     onClick={() => setEditMode(true)}
                                     disabled={loading}
                                     className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-medium transition-all disabled:opacity-70"
@@ -259,11 +262,11 @@ const Profile = ({ onUpdateProfile, onLogout }) => {
                             <div className="space-y-6">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
-                                    <input 
-                                        type="text" 
-                                        name="name" 
-                                        value={tempUser.name} 
-                                        onChange={handleInputChange} 
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={tempUser.name}
+                                        onChange={handleInputChange}
                                         disabled={loading}
                                         className="w-full px-5 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                     />
@@ -271,26 +274,26 @@ const Profile = ({ onUpdateProfile, onLogout }) => {
 
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-                                    <input 
-                                        type="email" 
-                                        name="email" 
-                                        value={tempUser.email} 
-                                        onChange={handleInputChange} 
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value={tempUser.email}
+                                        onChange={handleInputChange}
                                         disabled={loading}
                                         className="w-full px-5 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                     />
                                 </div>
 
                                 <div className="flex gap-4 pt-4">
-                                    <button 
-                                        onClick={handleSaveProfile} 
+                                    <button
+                                        onClick={handleSaveProfile}
                                         disabled={loading}
                                         className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 rounded-2xl font-medium transition-all disabled:opacity-70"
                                     >
                                         {loading ? "Saving..." : "Save Changes"}
                                     </button>
-                                    <button 
-                                        onClick={handleCancelEdit} 
+                                    <button
+                                        onClick={handleCancelEdit}
                                         disabled={loading}
                                         className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-3.5 rounded-2xl font-medium transition-all"
                                     >
@@ -327,7 +330,7 @@ const Profile = ({ onUpdateProfile, onLogout }) => {
                                     <p className="font-medium text-gray-800">Password</p>
                                     <p className="text-sm text-gray-500">Last changed recently</p>
                                 </div>
-                                <button 
+                                <button
                                     onClick={() => setShowPasswordModal(true)}
                                     disabled={loading}
                                     className="px-6 py-2.5 bg-white border border-gray-300 hover:border-emerald-500 text-gray-700 hover:text-emerald-600 rounded-2xl font-medium transition-all"
@@ -337,7 +340,7 @@ const Profile = ({ onUpdateProfile, onLogout }) => {
                             </div>
                         </div>
 
-                        <button 
+                        <button
                             onClick={handleLogout}
                             disabled={loading}
                             className="w-full flex items-center justify-center gap-3 bg-red-600 hover:bg-red-700 text-white py-4 rounded-2xl font-medium transition-all disabled:opacity-70"
@@ -362,7 +365,7 @@ const Profile = ({ onUpdateProfile, onLogout }) => {
                 <div className="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden">
                     <div className="flex items-center justify-between px-8 py-6 border-b">
                         <h3 className="text-2xl font-semibold text-gray-900">Change Password</h3>
-                        <button 
+                        <button
                             onClick={closePasswordModal}
                             disabled={loading}
                             className="text-gray-400 hover:text-gray-600 transition-colors"

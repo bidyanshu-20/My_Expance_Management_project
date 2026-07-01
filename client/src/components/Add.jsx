@@ -34,7 +34,7 @@ const AddTransactionModal = ({
                         <X size={24} />
                     </button>
                 </div>
-                <form action="" onSubmit={(e) => { e.preventDefault(); handleAddTransaction() }}>\
+                <form action="" onSubmit={(e) => { e.preventDefault(); handleAddTransaction() }}>
                     <div className={modalStyles.form}>
                         <div>
                             <label className={modalStyles.label} htmlFor="">Description</label>
