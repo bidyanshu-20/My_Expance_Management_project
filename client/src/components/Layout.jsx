@@ -10,7 +10,7 @@ import {
     RefreshCw, ChevronDown, ChevronUp, PieChart, Info
 } from 'lucide-react';
 
-const API_BASE = "/api";
+const API_BASE = import.meta.env.VITE_API_URL + "/api";
 
 const CATEGORY_ICONS = {
     Food: <span className="text-orange-500">🍔</span>,
