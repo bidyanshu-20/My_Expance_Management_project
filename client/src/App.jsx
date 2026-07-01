@@ -7,7 +7,7 @@ import SignUp from "./components/SignUp"
 import Expense from "./pages/Expense"
 import Income from "./pages/Income"
 import Profile from "./pages/Profile"
-const API_URL = "http://localhost:4000";
+const API_URL = "https://my-expance-management-project.onrender.com";
 // to get transactions from localStorage
 const getTransactionsFromStorage = () => {
   const saved = localStorage.getItem("transactions");

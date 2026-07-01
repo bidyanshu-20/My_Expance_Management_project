@@ -5,9 +5,14 @@ import { Eye, EyeOff, Lock, User, X, LogOut } from 'lucide-react';
 import { toast, ToastContainer } from 'react-toastify';
 import axios from 'axios';
 
-const BASE_URL = "http://localhost:4000/api";
+// const BASE_URL = "http://localhost:4000/api";
+const appName = import.meta.env.VITE_API_URL;
 
+const BASE_URL = `${appName}/api`;
 Modal.setAppElement('#root');
+const appName = import.meta.env.VITE_API_URL;
+
+console.log("->>>>>",appName);
 
 // Reusable Password Input Component
 const PasswordInput = memo(({

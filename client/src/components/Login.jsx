@@ -12,6 +12,7 @@ const Login = ({ onLogin, API_URL = "http://localhost:4000" }) => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  
   const fetchProfile = async (token) => {
     if (!token) return null;
     try {
